@@ -72,155 +72,84 @@
     <xacro:steering prefix="back_left" x_reflect="-1" y_reflect="1"/>
     <xacro:steering prefix="front_right" x_reflect="-1" y_reflect="-1"/>
 
+    <!-- WHEELS -->
+    <xacro:macro name="wheel" params="prefix">
+        <link name="${prefix}_wheel">
+            <visual>
+                <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/> <!-- Rotate the wheel for alignment -->
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="0.05"/> <!-- Cylinder dimensions -->
+                </geometry>
+            </visual>
+        </link>
+    </xacro:macro>
 
-<!-- I GOT TO HERE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - -->
-<!-- I GOT TO HERE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - -->
-<!-- I GOT TO HERE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - -->
-<!-- I GOT TO HERE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - -->
-<!-- I GOT TO HERE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - -->
-<!-- I GOT TO HERE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - -->
-<!-- I GOT TO HERE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - -->
-<!-- I GOT TO HERE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - -->
+    <xacro:wheel prefix="front_left"/>
+    <xacro:wheel prefix="front_right"/>
+    <xacro:wheel prefix="middle_left"/>
+    <xacro:wheel prefix="middle_rigth"/>
+    <xacro:wheel prefix="back_left"/>
+    <xacro:wheel prefix="back_right"/>
 
-    <link name="front_left_wheel">
-        <visual>
-            <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/>
-            <geometry>
-                <cylinder radius="0.1" length="0.05"/>
-            </geometry>
-        </visual>
-   </link>
+    <!-- WHEEL JOINTS -->
 
-       <link name="front_right_wheel">
-        <visual>
-            <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/>
-            <geometry>
-                <cylinder radius="0.1" length="0.05"/>
-            </geometry>
-        </visual>
-   </link>
+    <xacro:macro name="wheel_joint" params="prefix x_origin y_origin z_origin">
+        <joint name="${prefix}_wheel_joint" type="continuous">
+            <parent link="${prefix}_steering_link"/> 
+            <child link="${prefix}_wheel"/>
+            <axis xyz="0 0 1"/>
+            <origin xyz="${x_origin} ${y_origin} ${z_origin}" rpy="0 0 0"/>
+        </joint>
+    </xacro:macro>
 
-       <link name="middle_left_wheel">
-        <visual>
-            <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/>
-            <geometry>
-                <cylinder radius="0.1" length="0.05"/>
-            </geometry>
-        </visual>
-   </link>
-       <link name="middle_right_wheel">
-        <visual>
-            <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/>
-            <geometry>
-                <cylinder radius="0.1" length="0.05"/>
-            </geometry>
-        </visual>
-   </link>
-       <link name="back_left_wheel">
-        <visual>
-            <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/>
-            <geometry>
-                <cylinder radius="0.1" length="0.05"/>
-            </geometry>
-        </visual>
-   </link>
-       <link name="back_right_wheel">
-        <visual>
-            <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/>
-            <geometry>
-                <cylinder radius="0.1" length="0.05"/>
-            </geometry>
-        </visual>
-   </link>
+    <!-- Only middle left and middle right are differnet for origin pos (x,y,z) -->
+    <xacro:wheel_joint prefix="front_left" x_origin="0.0" y_origin="0.0" z_origin="${footprint}"/>
+    <xacro:wheel_joint prefix="front_right" x_origin="0.0" y_origin="0.0" z_origin="${footprint}"/>
+    <xacro:wheel_joint prefix="middle_left" x_origin="0.0" y_origin="-0.25" z_origin="-0.25"/>
+    <xacro:wheel_joint prefix="middle_right" x_origin="0.0" y_origin="0.25" z_origin="-0.25"/> 
+    <xacro:wheel_joint prefix="back_left" x_origin="0.0" y_origin="0.0" z_origin="${footprint}"/>
+    <xacro:wheel_joint prefix="back_right" x_origin="0.0" y_origin="0.0" z_origin="${footprint}"/>
 
-    <joint name="front_left_wheel_joint" type="continuous">
-        <parent link="front_left_steering"/>
-        <child link="front_left_wheel"/>
-        <axis xyz="0 0 1"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-    </joint>
+   <!--Camera Addition-->
 
-    <joint name="front_right_wheel_joint" type="continuous">
-        <parent link="front_right_steering"/>
-        <child link="front_right_wheel"/>
-        <axis xyz="0 0 1"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-    </joint>
-
-    <joint name="middle_left_wheel_joint" type="continuous">
-        <parent link="base_link"/>
-        <child link="middle_left_wheel"/>
-        <axis xyz="0 0 1"/>
-        <origin xyz="0 -0.25 -0.25" rpy="0 0 0"/>
-    </joint>
-
-    <joint name="middle_right_wheel_joint_" type="continuous">
-        <parent link="base_link"/>
-        <child link="middle_right_wheel"/>
-        <axis xyz="0 0 1"/>
-        <origin xyz="0 0.25 -0.25" rpy="0 0 0"/>
-    </joint>
-
-    <joint name="back_left_wheel_joint" type="continuous">
-        <parent link="back_left_steering"/>
-        <child link="back_left_wheel"/>
-        <axis xyz="0 0 1"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-    </joint>
-
-    <joint name="back_right_wheel_joint" type="continuous">
-        <parent link="back_right_steering"/>
-        <child link="back_right_wheel"/>
-        <axis xyz="0 0 1"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-    </joint>
-
-   <!--Camera Addtion-->
-
-   <xacro:arg name="camera_name"   default="zed2i" />
-  <xacro:arg name="camera_model"  default="zed2i" />
-  <xacro:arg name="use_zed_localization" default="true" />
+    <xacro:arg name="camera_name"   default="zed2i" />
+    <xacro:arg name="camera_model"  default="zed2i" />
+    <xacro:arg name="use_zed_localization" default="true" />
 
     <xacro:zed_camera name="$(arg camera_name)" model="$(arg camera_model)" />
 
      <!-- Add the first ZED Camera -->  
-      <xacro:if value="$(arg use_zed_localization)">
-    <!-- ZED Localization -> The reference link is '$(arg camera_name)_camera_link' and 'base_link' is a child -->
-    <joint name="$(arg camera_name)_joint" type="fixed">
-      <parent link="base_link"/>
-      <child link="$(arg camera_name)_camera_link"/>
-      <origin
-        xyz="-0.12 0.0 -0.25"
-        rpy="0 0 0"
-      />
-    </joint>
-  </xacro:if>
-  <xacro:unless value="$(arg use_zed_localization)">
-    <!-- NO ZED Localization -> '$(arg camera_name)_camera_link' is a child of 'base_link' -->
-    <joint name="$(arg camera_name)_joint" type="fixed">
-      <parent link="base_link"/>
-      <child link="$(arg camera_name)_camera_link"/>
-      <origin
-        xyz="0.12 0.0 0.25"
-        rpy="0 0 0"
-      />
-    </joint>
-  </xacro:unless>
-
-
-  <link name="gnss_link">
-        <visual>
-            <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/>
-            <geometry>
-                <cylinder radius="0.05" length="0.05"/>
-            </geometry>
-        </visual>
-   </link>
-
-    <joint name="gnss_joint" type="fixed">
+    <xacro:if value="$(arg use_zed_localization)">
+        <!-- ZED Localization -> The reference link is '$(arg camera_name)_camera_link' and 'base_link' is a child -->
+        <joint name="$(arg camera_name)_joint" type="fixed">
         <parent link="base_link"/>
-        <child link="gnss_link"/>
-        <origin xyz="0 0 0.70" rpy="0 0 0"/>
-    </joint>
+        <child link="$(arg camera_name)_camera_link"/>
+        <origin xyz="${camera_y} ${camera_z}" rpy="0 0 0"/>
+        </joint>
+    </xacro:if>
+    <xacro:unless value="$(arg use_zed_localization)">
+        <!-- NO ZED Localization -> '$(arg camera_name)_camera_link' is a child of 'base_link' -->
+        <joint name="$(arg camera_name)_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="$(arg camera_name)_camera_link"/>
+        <origin xyz="${camera_y} ${camera_z}" rpy="0 0 0"/>
+        </joint>
+    </xacro:unless>
 
+<!--GNSS-->
+
+    <link name="gnss_link">
+            <visual>
+                <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/>
+                <geometry>
+                    <cylinder radius="0.05" length="0.05"/> <!-- GNSS radius?-->
+                </geometry>
+            </visual>
+    </link>
+
+        <joint name="gnss_joint" type="fixed">
+            <parent link="base_link"/>
+            <child link="gnss_link"/>
+            <origin xyz="${gnss_x} ${gnss_y} ${gnss_z}" rpy="0 0 0"/> <!-- GNSS position -->
+        </joint>
 </robot>
